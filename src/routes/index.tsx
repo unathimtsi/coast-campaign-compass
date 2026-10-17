@@ -47,7 +47,7 @@ function Index() {
   }, []);
 
   const plan = useMemo(() => planForDate(selected)!, [selected]);
-  const { y, m } = MONTHS[monthIdx];
+  const { y, m } = MONTHS[monthIdx]!;
   const first = (new Date(y, m, 1).getDay() + 6) % 7;
   const days = new Date(y, m + 1, 0).getDate();
   const label = new Date(y, m, 1).toLocaleDateString("en-ZA", { month: "long", year: "numeric" });
@@ -141,7 +141,7 @@ function Index() {
               </p>
               <a
                 className="mt-2 inline-block text-sm font-semibold text-ocean underline"
-                href={`https://www.google.com/search?q=weather+${encodeURIComponent(plan.primary.beach.split(" /")[0])}+KZN`}
+                href={`https://www.google.com/search?q=weather+${encodeURIComponent(plan.primary.beach.split(" /")[0] ?? "")}+KZN`}
                 target="_blank"
                 rel="noreferrer"
               >
