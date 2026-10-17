@@ -15,12 +15,14 @@ export function RouteMap({ plan }: { plan: DayPlan }) {
       if (cancelled || !el.current) return;
       if (!mapRef.current) {
         mapRef.current = L.map(el.current, { scrollWheelZoom: false }).setView([-29.8, 31.05], 9);
-        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+        L.tileLayer("/api/map-tiles?z={z}&x={x}&y={y}", {
           attribution: "&copy; OpenStreetMap &copy; CARTO",
+          maxZoom: 20,
         }).addTo(mapRef.current);
         layerRef.current = L.layerGroup().addTo(mapRef.current);
       }
-      const layer = layerRef.current!;
+      const layer = layerRef.current;
+      if (!layer) return;
       layer.clearLayers();
       const pin = (cls: string, label: string) =>
         L.divIcon({ className: "", html: `<div class="map-pin ${cls}">${label}</div>`, iconSize: [0, 0] });
