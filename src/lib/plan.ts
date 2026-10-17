@@ -60,8 +60,10 @@ export function planForDate(date: string, all: CampaignEvent[] = events): DayPla
 
   const ranked = [...ZONES].sort((a, b) => totals.get(b.id)! - totals.get(a.id)! || a.km - b.km);
   const primary = ranked[0];
+  if (!primary) return null;
   const backup =
     ranked.find((z) => Math.abs(z.km - primary.km) >= MIN_BACKUP_KM) ?? ranked[1];
+  if (!backup) return null;
   return {
     date,
     primary,
