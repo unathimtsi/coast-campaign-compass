@@ -15,7 +15,7 @@ export function RouteMap({ plan }: { plan: DayPlan }) {
       if (cancelled || !el.current) return;
       if (!mapRef.current) {
         mapRef.current = L.map(el.current, { scrollWheelZoom: false }).setView([-29.8, 31.05], 9);
-        L.tileLayer("https://{s}.basemap.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
           attribution: "&copy; OpenStreetMap &copy; CARTO",
         }).addTo(mapRef.current);
         layerRef.current = L.layerGroup().addTo(mapRef.current);
