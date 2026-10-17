@@ -8,3 +8,4 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+- Campaign listings live in src/data/events.json (generated from the prospectus PDF); daily main/backup spots are computed in src/lib/plan.ts so the calendar and map stay in sync.
