@@ -5,6 +5,7 @@ import logo from "@/assets/thirsti-logo.png.asset.json";
 import { planForDate, WINDOW_END, WINDOW_START, ZONES } from "@/lib/plan";
 import { RouteMap } from "@/components/RouteMap";
 import { KIND_LABEL, PRIORITY_LABEL } from "@/components/kinds";
+import { ProductCarousel } from "@/components/ProductCarousel";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -188,6 +189,7 @@ function Index() {
           </p>
         </section>
       </main>
+      <ProductCarousel />
     </div>
   );
 }
