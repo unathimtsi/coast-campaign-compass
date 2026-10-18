@@ -18,12 +18,12 @@ export function ProductCarousel() {
   }, [api]);
 
   return (
-    <section aria-labelledby="product-range-title" className="mx-auto max-w-7xl px-4 pb-8">
-      <Carousel setApi={setApi} opts={{ loop: true }} aria-label="Thirsti product range" className="border-t border-border pt-6">
-        <div className="mb-5 flex items-center justify-between gap-3">
+    <section id="product-range" aria-labelledby="product-range-title" className="border-t border-border bg-secondary">
+      <Carousel setApi={setApi} opts={{ loop: true }} aria-label="Thirsti product range" className="mx-auto max-w-7xl px-4 py-9 md:py-12">
+        <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase text-ocean">Brand knowledge</p>
-            <h2 id="product-range-title" className="font-display text-3xl uppercase">Thirsti product range</h2>
+            <p className="mb-2 text-xs font-bold uppercase text-primary">Meet the range</p>
+            <h2 id="product-range-title" className="font-display text-2xl font-extrabold uppercase md:text-3xl">THIRSTI product range</h2>
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <span className="mr-1 text-sm tabular-nums text-muted-foreground" aria-live="polite">{current + 1} / {PRODUCTS.length}</span>
@@ -35,11 +35,11 @@ export function ProductCarousel() {
           {PRODUCTS.map((product, index) => (
             <CarouselItem key={product.id} aria-label={`${product.name}, ${index + 1} of ${PRODUCTS.length}`} aria-hidden={index !== current} inert={index !== current}>
               <div className="grid min-h-[460px] gap-6 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:gap-10">
-                <div className="flex h-[280px] items-center justify-center rounded-lg bg-card p-5 md:h-[460px]">
+                <div className="flex h-[280px] items-center justify-center bg-card p-5 md:h-[460px]">
                   <img src={product.image} alt={`Thirsti ${product.name} product range`} className="h-full w-full object-contain" loading="lazy" draggable={false} />
                 </div>
                 <div className="min-w-0 py-2 md:py-6">
-                  <h3 className="font-display text-4xl uppercase text-foreground">{product.name}</h3>
+                  <h3 className="font-display text-3xl font-extrabold uppercase text-foreground md:text-4xl">{product.name}</h3>
                   <p className="mt-1 text-sm font-medium text-ocean">{product.type}</p>
                   <dl className="mt-5 space-y-4">
                     <div>
@@ -48,7 +48,7 @@ export function ProductCarousel() {
                     </div>
                     <div>
                       <dt className="mb-1 text-xs font-semibold uppercase text-muted-foreground">Sizes</dt>
-                      <dd className="font-semibold">{product.sizes.join(" · ")}</dd>
+                      <dd className="font-bold text-primary">{product.sizes.join(" · ")}</dd>
                     </div>
                     <div>
                       <dt className="mb-1 text-xs font-semibold uppercase text-muted-foreground">Purpose</dt>
