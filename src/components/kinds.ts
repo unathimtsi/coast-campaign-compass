@@ -2,9 +2,9 @@ import type { Kind } from "@/lib/plan";
 
 export const KIND_LABEL: Record<Kind, string> = {
   event: "Dated event",
-  parkrun: "parkrun lead",
+  parkrun: "parkrun",
   market: "Market",
-  beach: "Beach / promenade prospect",
+  beach: "Beach window",
 };
 
 export const PRIORITY_LABEL: Record<string, string> = {
@@ -12,7 +12,4 @@ export const PRIORITY_LABEL: Record<string, string> = {
   B: "B · Check before planning",
   C: "C · High sponsor risk",
   P: "P · Proposed activation",
-  "1": "1 · Best fit: community fitness",
-  "2": "2 · Best fit: beach / promenade",
-  "4": "4 · Selective: market / family venue",
 };

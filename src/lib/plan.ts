@@ -1,5 +1,4 @@
 import rawEvents from "@/data/events.json";
-import { rotationForDate } from "@/data/campaign";
 
 export type Kind = "event" | "parkrun" | "market" | "beach";
 export type CampaignEvent = {
@@ -13,7 +12,6 @@ export type CampaignEvent = {
   priority: string;
   time: string;
   note: string;
-  status?: "prospect";
 };
 
 export const events = rawEvents as CampaignEvent[];
@@ -37,10 +35,9 @@ export const WINDOW_END = "2027-02-07";
 
 // How strongly each listing pulls the team to its zone.
 export function score(e: CampaignEvent): number {
-  if (e.kind === "parkrun") return 5;
-  if (e.kind === "beach") return 4;
-  if (e.kind === "market") return 2;
-  return 0; // Controlled events are permission-led exceptions, never core leads.
+  if (e.kind === "event") return e.priority === "B" ? 4 : 1;
+  if (e.kind === "beach") return 1;
+  return 3; // parkrun / market (A – first contact)
 }
 
 export type DayPlan = {
@@ -59,11 +56,10 @@ export function planForDate(date: string, all: CampaignEvent[] = events): DayPla
   if (date < WINDOW_START || date > WINDOW_END) return null;
   const day = all.filter((e) => e.date === date);
   const totals = new Map<string, number>(ZONES.map((z) => [z.id, 0]));
-  for (const e of day) if (totals.has(e.zone)) totals.set(e.zone, (totals.get(e.zone) ?? 0) + score(e));
+  for (const e of day) if (totals.has(e.zone)) totals.set(e.zone, totals.get(e.zone)! + score(e));
 
-  const ranked = [...ZONES].sort((a, b) => (totals.get(b.id) ?? 0) - (totals.get(a.id) ?? 0) || a.km - b.km);
-  const rotation = rotationForDate(date);
-  const primary = all === events ? zoneById(rotation?.zone ?? "south") : ranked[0];
+  const ranked = [...ZONES].sort((a, b) => totals.get(b.id)! - totals.get(a.id)! || a.km - b.km);
+  const primary = ranked[0];
   if (!primary) return null;
   const backup =
     ranked.find((z) => Math.abs(z.km - primary.km) >= MIN_BACKUP_KM) ?? ranked[1];
