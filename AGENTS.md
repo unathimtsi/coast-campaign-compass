@@ -8,7 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
-- Campaign listings live in src/data/events.json (generated from the prospectus PDF); daily main/backup spots are computed in src/lib/plan.ts so the calendar and map stay in sync.
+- Campaign prospects live in src/data/events.json; src/data/campaign.ts defines the revised prospectus's suggested weekly cluster rotation, and src/lib/plan.ts keeps calendar and map recommendations in sync without treating leads as bookings.
 - Leaflet loads CARTO PNGs through the same-origin map-tiles server route, which validates coordinates and reads the CARTO credential only inside its handler to keep it out of browser requests.
 - Product education uses a source-linked range data module and the existing Embla carousel controls, keeping product facts independent of campaign scheduling.
 - Brand storytelling lives in a dedicated OurStory section with an official source link; keep origin facts separate from scheduling logic.
