@@ -6,6 +6,8 @@ import { planForDate, WINDOW_END, WINDOW_START, ZONES } from "@/lib/plan";
 import { RouteMap } from "@/components/RouteMap";
 import { KIND_LABEL, PRIORITY_LABEL } from "@/components/kinds";
 import { ProductCarousel } from "@/components/ProductCarousel";
+import { OurStory } from "@/components/OurStory";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,8 +49,10 @@ function Index() {
     }
   }, []);
 
-  const plan = useMemo(() => planForDate(selected)!, [selected]);
-  const { y, m } = MONTHS[monthIdx]!;
+  const plan = useMemo(() => planForDate(selected), [selected]);
+  const month = MONTHS[monthIdx];
+  if (!plan || !month) return null;
+  const { y, m } = month;
   const first = (new Date(y, m, 1).getDay() + 6) % 7;
   const days = new Date(y, m + 1, 0).getDate();
   const label = new Date(y, m, 1).toLocaleDateString("en-ZA", { month: "long", year: "numeric" });
@@ -60,28 +64,34 @@ function Index() {
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
-          <img src={logo.url} alt="Thirsti" className="h-10 w-auto" />
-          <div>
-            <h1 className="font-display text-2xl uppercase leading-none tracking-wide text-foreground">
-              Cruising The Coastline
-            </h1>
-            <p className="text-sm text-muted-foreground">KZN activation planner · 28 Nov 2026 – 7 Feb 2027 · Internal</p>
-          </div>
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+          <a href="#planner" aria-label="THIRSTI activation planner"><img src={logo.url} alt="THIRSTI" className="h-10 w-auto md:h-12" /></a>
+          <nav aria-label="Page sections" className="flex items-center gap-1">
+            <Button asChild variant="ghost" size="sm" className="text-xs font-bold uppercase"><a href="#planner">Planner</a></Button>
+            <Button asChild variant="ghost" size="sm" className="text-xs font-bold uppercase"><a href="#product-range">Our range</a></Button>
+            <Button asChild variant="ghost" size="sm" className="text-xs font-bold uppercase"><a href="#our-story">Our story</a></Button>
+          </nav>
         </div>
       </header>
+      <div className="border-b-4 border-primary bg-brand-ink text-brand-ink-foreground">
+        <div className="mx-auto max-w-7xl px-4 py-7 md:py-9">
+          <p className="mb-2 text-xs font-bold uppercase text-brand-ink-foreground/65">THIRSTI · Summer on the KZN coast</p>
+          <h1 className="font-display text-3xl font-extrabold uppercase leading-tight md:text-4xl">Cruising the coastline</h1>
+          <p className="mt-3 text-sm text-brand-ink-foreground/80">28 Nov 2026 – 7 Feb 2027 <span className="mx-2">/</span> Internal activation planner</p>
+        </div>
+      </div>
 
-      <main className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[380px_1fr]">
+      <main id="planner" className="mx-auto grid max-w-7xl items-start gap-6 px-4 py-7 lg:grid-cols-[340px_1fr] lg:gap-8">
         {/* Calendar */}
-        <section className="rounded-lg border border-border bg-card p-4">
+        <section aria-label="Activation calendar" className="border-t-4 border-primary bg-card pt-4">
           <div className="mb-3 flex items-center justify-between">
-            <button aria-label="Previous month" disabled={monthIdx === 0} onClick={() => setMonthIdx(monthIdx - 1)} className="rounded p-1 hover:bg-muted disabled:opacity-30">
+            <Button variant="ghost" size="icon" title="Previous month" aria-label="Previous month" disabled={monthIdx === 0} onClick={() => setMonthIdx(monthIdx - 1)}>
               <ChevronLeft className="h-5 w-5" />
-            </button>
-            <h2 className="font-display text-xl uppercase">{label}</h2>
-            <button aria-label="Next month" disabled={monthIdx === MONTHS.length - 1} onClick={() => setMonthIdx(monthIdx + 1)} className="rounded p-1 hover:bg-muted disabled:opacity-30">
+            </Button>
+            <h2 className="font-display text-base font-bold uppercase">{label}</h2>
+            <Button variant="ghost" size="icon" title="Next month" aria-label="Next month" disabled={monthIdx === MONTHS.length - 1} onClick={() => setMonthIdx(monthIdx + 1)}>
               <ChevronRight className="h-5 w-5" />
-            </button>
+            </Button>
           </div>
           <div className="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-muted-foreground">
             {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d) => <div key={d}>{d}</div>)}
@@ -93,17 +103,20 @@ function Index() {
               const p = planForDate(d);
               const active = d === selected;
               return (
-                <button
+                <Button
+                  variant="ghost"
                   key={d}
+                  aria-label={`Activate on ${d}`}
+                  aria-pressed={active}
                   disabled={!p}
                   onClick={() => setSelected(d)}
-                  className={`flex aspect-square flex-col items-center justify-center rounded-md border text-sm transition-colors disabled:border-transparent disabled:opacity-25 ${
-                    active ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary"
+                  className={`flex aspect-square h-auto w-full flex-col items-center justify-center gap-0 rounded-sm border p-0 text-sm transition-colors disabled:border-transparent disabled:opacity-25 ${
+                    active ? "border-primary bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground" : "border-border hover:border-primary"
                   }`}
                 >
                   <span className="font-semibold">{i + 1}</span>
                   {p && <span className={`text-[9px] leading-tight ${active ? "" : "text-ocean"}`}>{ZONE_SHORT[p.primary.id]}</span>}
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -120,22 +133,22 @@ function Index() {
         {/* Day detail */}
         <section className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="rounded-lg bg-primary p-5 text-primary-foreground">
+            <div className="rounded-sm bg-primary p-5 text-primary-foreground">
               <p className="text-sm opacity-90">{selLabel}</p>
-              <p className="mt-2 flex items-center gap-2 text-xs uppercase tracking-widest opacity-90">
+              <p className="mt-3 flex items-center gap-2 text-xs font-bold uppercase opacity-90">
                 <Navigation className="h-4 w-4" /> Activate today
               </p>
-              <h2 className="font-display text-3xl uppercase leading-tight">{plan.primary.name}</h2>
+              <h2 className="mt-2 font-display text-2xl font-extrabold uppercase leading-tight">{plan.primary.name}</h2>
               <p className="font-medium">{plan.primary.beach}</p>
               <p className="mt-2 text-sm opacity-90">
                 {plan.primaryEvents.length} listing{plan.primaryEvents.length === 1 ? "" : "s"} in this zone today.
               </p>
             </div>
-            <div className="rounded-lg border-2 border-ocean bg-card p-5">
-              <p className="flex items-center gap-2 text-xs uppercase tracking-widest text-ocean">
+            <div className="border-t-4 border-ocean bg-muted p-5">
+              <p className="flex items-center gap-2 text-xs font-bold uppercase text-ocean">
                 <CloudRain className="h-4 w-4" /> Weather Plan B
               </p>
-              <h3 className="font-display text-2xl uppercase leading-tight text-foreground">{plan.backup.name}</h3>
+              <h3 className="mb-2 mt-2 font-display text-xl font-bold uppercase leading-tight text-foreground">{plan.backup.name}</h3>
               <p className="text-sm text-foreground">
                 If rain or strong wind is forecast for {plan.primary.name} today, activate at{" "}
                 <strong>{plan.backup.beach}</strong> instead — about {plan.backupDistanceKm} km {plan.backupDirection} along the coast.
@@ -151,7 +164,7 @@ function Index() {
             </div>
           </div>
 
-          <div className="h-[440px] overflow-hidden rounded-lg border border-border">
+          <div className="h-[440px] overflow-hidden rounded-sm border border-border">
             <RouteMap plan={plan} />
           </div>
           <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
@@ -160,8 +173,8 @@ function Index() {
             ))}
           </div>
 
-          <div className="rounded-lg border border-border bg-card">
-            <h3 className="border-b border-border px-4 py-3 font-display text-lg uppercase">What's happening today</h3>
+          <div className="border-t-4 border-brand-ink bg-card">
+            <h3 className="border-b border-border py-4 font-display text-base font-bold uppercase">What's happening today</h3>
             <ul className="divide-y divide-border">
               {[...plan.primaryEvents, ...others].map((e, i) => (
                 <li key={i} className="flex gap-3 px-4 py-3">
@@ -190,6 +203,8 @@ function Index() {
         </section>
       </main>
       <ProductCarousel />
+      <OurStory />
+      <footer className="border-t border-border bg-card"><div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-5"><img src={logo.url} alt="THIRSTI" className="h-7 w-auto" /><p className="text-xs text-muted-foreground">Cruising the coastline · Internal team use</p></div></footer>
     </div>
   );
 }
