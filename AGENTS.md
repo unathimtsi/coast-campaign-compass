@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 - Campaign listings live in src/data/events.json (generated from the prospectus PDF); daily main/backup spots are computed in src/lib/plan.ts so the calendar and map stay in sync.
 - Leaflet loads CARTO PNGs through the same-origin map-tiles server route, which validates coordinates and reads the CARTO credential only inside its handler to keep it out of browser requests.
+- Product education uses a source-linked range data module and the existing Embla carousel controls, keeping product facts independent of campaign scheduling.
