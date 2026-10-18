@@ -8,6 +8,7 @@ import { KIND_LABEL, PRIORITY_LABEL } from "@/components/kinds";
 import { ProductCarousel } from "@/components/ProductCarousel";
 import { OurStory } from "@/components/OurStory";
 import { Button } from "@/components/ui/button";
+import { rotationForDate } from "@/data/campaign";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,6 +61,7 @@ function Index() {
     weekday: "long", day: "numeric", month: "long", year: "numeric",
   });
   const others = plan.events.filter((e) => e.zone !== plan.primary.id);
+  const rotation = rotationForDate(selected);
 
   return (
     <div className="min-h-screen bg-background">
@@ -136,12 +138,12 @@ function Index() {
             <div className="rounded-sm bg-primary p-5 text-primary-foreground">
               <p className="text-sm opacity-90">{selLabel}</p>
               <p className="mt-3 flex items-center gap-2 text-xs font-bold uppercase opacity-90">
-                <Navigation className="h-4 w-4" /> Activate today
+                <Navigation className="h-4 w-4" /> Suggested focus · not confirmed
               </p>
               <h2 className="mt-2 font-display text-2xl font-extrabold uppercase leading-tight">{plan.primary.name}</h2>
-              <p className="font-medium">{plan.primary.beach}</p>
+              <p className="font-medium">{rotation?.locations ?? plan.primary.beach}</p>
               <p className="mt-2 text-sm opacity-90">
-                {plan.primaryEvents.length} listing{plan.primaryEvents.length === 1 ? "" : "s"} in this zone today.
+                {plan.primaryEvents.length} prospect{plan.primaryEvents.length === 1 ? "" : "s"} in this zone today. Suggested weekly rotation; approval required.
               </p>
             </div>
             <div className="border-t-4 border-ocean bg-muted p-5">
@@ -150,8 +152,8 @@ function Index() {
               </p>
               <h3 className="mb-2 mt-2 font-display text-xl font-bold uppercase leading-tight text-foreground">{plan.backup.name}</h3>
               <p className="text-sm text-foreground">
-                If rain or strong wind is forecast for {plan.primary.name} today, activate at{" "}
-                <strong>{plan.backup.beach}</strong> instead — about {plan.backupDistanceKm} km {plan.backupDirection} along the coast.
+                If rain or strong wind is forecast for {plan.primary.name} today, consider{" "}
+                <strong>{plan.backup.beach}</strong> instead — about {plan.backupDistanceKm} km {plan.backupDirection} along the coast. Confirm safe conditions and separate sampling approval first.
               </p>
               <a
                 className="mt-2 inline-block text-sm font-semibold text-ocean underline"
@@ -174,7 +176,7 @@ function Index() {
           </div>
 
           <div className="border-t-4 border-brand-ink bg-card">
-            <h3 className="border-b border-border py-4 font-display text-base font-bold uppercase">What's happening today</h3>
+            <h3 className="border-b border-border py-4 font-display text-base font-bold uppercase">Today's prospects · confirmation required</h3>
             <ul className="divide-y divide-border">
               {[...plan.primaryEvents, ...others].map((e, i) => (
                 <li key={i} className="flex gap-3 px-4 py-3">
@@ -198,7 +200,7 @@ function Index() {
             </ul>
           </div>
           <p className="text-xs text-muted-foreground">
-            Listed ≠ approved. Confirm permission and beverage exclusivity with the organiser, venue or municipality before deploying.
+            No distribution until the activity/date is confirmed, the responsible rights holder has authorised sampling, beverage exclusivity has been checked and required permits are in place. Reconfirm 48–72 hours before deployment; keep handouts light-touch and access routes clear.
           </p>
         </section>
       </main>
