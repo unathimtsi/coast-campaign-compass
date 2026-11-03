@@ -30,8 +30,8 @@ export const ZONES: Zone[] = [
 
 export const zoneById = (id: string) => ZONES.find((z) => z.id === id);
 
-export const WINDOW_START = "2026-11-28";
-export const WINDOW_END = "2027-02-07";
+export const WINDOW_START = "2026-12-20";
+export const WINDOW_END = "2027-01-16";
 
 // How strongly each listing pulls the team to its zone.
 export function score(e: CampaignEvent): number {
@@ -56,9 +56,9 @@ export function planForDate(date: string, all: CampaignEvent[] = events): DayPla
   if (date < WINDOW_START || date > WINDOW_END) return null;
   const day = all.filter((e) => e.date === date);
   const totals = new Map<string, number>(ZONES.map((z) => [z.id, 0]));
-  for (const e of day) if (totals.has(e.zone)) totals.set(e.zone, totals.get(e.zone)! + score(e));
+  for (const e of day) if (totals.has(e.zone)) totals.set(e.zone, (totals.get(e.zone) ?? 0) + score(e));
 
-  const ranked = [...ZONES].sort((a, b) => totals.get(b.id)! - totals.get(a.id)! || a.km - b.km);
+  const ranked = [...ZONES].sort((a, b) => (totals.get(b.id) ?? 0) - (totals.get(a.id) ?? 0) || a.km - b.km);
   const primary = ranked[0];
   if (!primary) return null;
   const backup =

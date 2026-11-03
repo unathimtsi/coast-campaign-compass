@@ -25,10 +25,8 @@ export const Route = createFileRoute("/")({
 });
 
 const MONTHS = [
-  { y: 2026, m: 10 },
   { y: 2026, m: 11 },
   { y: 2027, m: 0 },
-  { y: 2027, m: 1 },
 ];
 const iso = (y: number, m: number, d: number) =>
   `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
@@ -77,7 +75,7 @@ function Index() {
         <div className="mx-auto max-w-7xl px-4 py-7 md:py-9">
           <p className="mb-2 text-xs font-bold uppercase text-brand-ink-foreground/65">THIRSTI · Summer on the KZN coast</p>
           <h1 className="font-display text-3xl font-extrabold uppercase leading-tight md:text-4xl">Cruising the coastline</h1>
-          <p className="mt-3 text-sm text-brand-ink-foreground/80">28 Nov 2026 – 7 Feb 2027 <span className="mx-2">/</span> Internal activation planner</p>
+          <p className="mt-3 text-sm text-brand-ink-foreground/80">20 Dec 2026 – 16 Jan 2027 <span className="mx-2">/</span> Internal activation planner</p>
         </div>
       </div>
 
